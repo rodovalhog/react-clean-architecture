@@ -1,4 +1,4 @@
 type AccountModel = {
-  accessToken: string;
+  accessToken: string
 };
-export default AccountModel;
+export default AccountModel
