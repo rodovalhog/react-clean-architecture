@@ -23,7 +23,7 @@
     "@typescript-eslint/camelcase": "off",
     "no-unused-vars" : "off",
     "@typescript-eslint/no-unused-vars" : "off",
-    "react/jsx-use-react": "error",
+    "react/jsx-use-react": "off",
     "react/jsx-uses-vars": "error"
   }
 }
