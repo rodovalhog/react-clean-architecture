@@ -1,5 +1,5 @@
 const path = require('path')
-const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
   mode: 'development',
@@ -12,7 +12,7 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', 'scss'],
     alias: {
-      '@': path.join('__dirname', 'src')
+      '@': path.join(__dirname, 'src')
     }
   },
   module: {
@@ -20,7 +20,7 @@ module.exports = {
       test:/\.ts(x?)$/,
       loader: 'ts-loader',
       exclude: /node_modules/
-    },{
+    }, {
       test: /\.scss$/,
       use: [{
         loader: 'style-loader'
@@ -31,8 +31,8 @@ module.exports = {
         }
       }, {
         loader: 'sass-loader'
-      }] 
-  }]
+      }]
+    }]
   },
   devServer: {
     contentBase: './public',
