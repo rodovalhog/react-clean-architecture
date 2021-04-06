@@ -1,4 +1,7 @@
-import Logo from '@/presetation/components/logo/logo'
+import Header from '@/presetation/components/login-header/login-header'
+
+import Footer from '@/presetation/components/footer/footer'
+
 import Spinner from '@/presetation/components/spinner/spinner'
 import React from 'react'
 import Styles from './login-styles.scss'
@@ -6,14 +9,11 @@ import Styles from './login-styles.scss'
 const Login: React.FC = () => {
   return (
     <div className={Styles.login}>
-      <header className={Styles.header}>
-        <Logo />
-        <h1>4Dev - Enquentes para programadores</h1>
-      </header>
+      <Header />
       <form className={Styles.form}>
         <h2>Login</h2>
         <div className={Styles.inputWrap}>
-          <input type="email" name="email" placeholder="Digite sua senha" />
+          <input type="email" name="email" placeholder="Digite sua e-mail" />
           <span className={Styles.status}>🏀</span>
         </div>
 
@@ -30,7 +30,7 @@ const Login: React.FC = () => {
           </span>
         </div>
       </form>
-      <footer className={Styles.footer}> b </footer>
+      <Footer />
     </div>
   )
 }
