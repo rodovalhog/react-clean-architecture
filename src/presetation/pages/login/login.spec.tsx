@@ -30,10 +30,10 @@ describe('Login Component', () => {
     expect(submitButton.disabled).toBe(true)
     const emailStatus = sut.getByTestId('email-status')
     expect(emailStatus.title).toBe(validationStub.errorMessage)
-    expect(emailStatus.textContent).toBe('🏀')
+    expect(emailStatus.textContent).toBe('🔴')
     const passwordStatus = sut.getByTestId('password-status')
     expect(passwordStatus.title).toBe(validationStub.errorMessage)
-    expect(passwordStatus.textContent).toBe('🏀')
+    expect(passwordStatus.textContent).toBe('🔴')
   })
 
   test('Should show email if  validation fails', () => {
@@ -42,7 +42,7 @@ describe('Login Component', () => {
     fireEvent.input(emailInput, { target: { value: faker.internet.email() } })
     const emailStatus = sut.getByTestId('email-status')
     expect(emailStatus.title).toBe(validationStub.errorMessage)
-    expect(emailStatus.textContent).toBe('🏀')
+    expect(emailStatus.textContent).toBe('🔴')
   })
 
   test('Should show password if  validation fails', () => {
@@ -51,7 +51,17 @@ describe('Login Component', () => {
     fireEvent.input(passwordInput, { target: { value: faker.internet.password() } })
     const passwordStatus = sut.getByTestId('password-status')
     expect(passwordStatus.title).toBe(validationStub.errorMessage)
-    expect(passwordStatus.textContent).toBe('🏀')
+    expect(passwordStatus.textContent).toBe('🔴')
+  })
+
+  test('Should show valid password state if validation sucessds', () => {
+    const { sut, validationStub } = makeSut()
+    validationStub.errorMessage = null
+    const passwordInput = sut.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: faker.internet.password() } })
+    const passwordStatus = sut.getByTestId('password-status')
+    expect(passwordStatus.title).toBe('Tudo certo')
+    expect(passwordStatus.textContent).toBe('🟢')
   })
 })
 
