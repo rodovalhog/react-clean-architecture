@@ -4,22 +4,35 @@ import Login from './login'
 import faker from 'faker'
 import { Validation } from '@/presetation/protocols/validation'
 import { ValidtionStub } from '@/presetation/test'
+import { Authentication, AuthenticationParams } from '@/domain/usecases'
+import { AccountModel } from '@/domain/models'
+import { mockAccountModel } from '@/domain/test'
+class AuthenticationSpy implements Authentication {
+  account = mockAccountModel()
+  params: AuthenticationParams
+  async auth (params: AuthenticationParams): Promise<AccountModel> {
+    this.params = params
+    return Promise.resolve(this.account)
+  }
+}
 
 type SutTypes = {
   sut: RenderResult
-  validationStub: ValidtionStub
+  authenticationSpy: AuthenticationSpy
 }
+
 type SutParams = {
   validationError: string
 }
 
 const makeSut = (params?: SutParams): SutTypes => {
+  const authenticationSpy = new AuthenticationSpy()
   const validationStub = new ValidtionStub()
   validationStub.errorMessage = params?.validationError
-  const sut = render(<Login validation={validationStub} />)
+  const sut = render(<Login validation={validationStub} authentication={authenticationSpy}/>)
   return {
     sut,
-    validationStub
+    authenticationSpy
   }
 }
 
@@ -78,7 +91,7 @@ describe('Login Component', () => {
     expect(passwordStatus.textContent).toBe('🟢')
   })
 
-  test('Should submit button disabled', () => {
+  test('Should submit button enabled', () => {
     const { sut } = makeSut()
     const emailInput = sut.getByTestId('email')
     fireEvent.input(emailInput, { target: { value: faker.internet.email() } })
@@ -98,6 +111,22 @@ describe('Login Component', () => {
     fireEvent.click(submitButton)
     const spinner = sut.getAllByTestId('spinner')
     expect(spinner).toBeTruthy()
+  })
+
+  test('Should call autentication with correct values', () => {
+    const { sut, authenticationSpy } = makeSut()
+    const emailInput = sut.getByTestId('email')
+    const email = faker.internet.email()
+    fireEvent.input(emailInput, { target: { value: email } })
+    const passwordInput = sut.getByTestId('password')
+    const password = faker.internet.password()
+    fireEvent.input(passwordInput, { target: { value: password } })
+    const submitButton = sut.getByTestId('submit')
+    fireEvent.click(submitButton)
+    expect(authenticationSpy.params).toEqual({
+      email,
+      password
+    })
   })
 })
 
