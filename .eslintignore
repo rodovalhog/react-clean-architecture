@@ -4,4 +4,3 @@ coverage
 public
 *.scss
 .eslint.js
-*.spec.tsx

@@ -1,3 +1,4 @@
+/* eslint-disable jest/expect-expect */
 import React from 'react'
 import { cleanup, fireEvent, render, RenderResult } from '@testing-library/react'
 import Login from './login'
@@ -119,6 +120,13 @@ describe('Login Component', () => {
       email,
       password
     })
+  })
+
+  test('Should call autentication only once', () => {
+    const { sut, authenticationSpy } = makeSut()
+    simulateValidSubmint(sut)
+    simulateValidSubmint(sut)
+    expect(authenticationSpy.callsCount).toBe(1)
   })
 })
 
