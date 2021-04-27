@@ -1,9 +1,11 @@
 /* eslint-disable no-undef */
 /* eslint-disable jest/expect-expect */
 import React from 'react'
-import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-library/react'
+import { Router } from 'react-router-dom'
+import { createMemoryHistory } from 'history'
 import faker from 'faker'
 import 'jest-localstorage-mock'
+import { cleanup, fireEvent, render, RenderResult, waitFor } from '@testing-library/react'
 import Login from './login'
 import { ValidtionStub, AuthenticationSpy } from '@/presetation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
@@ -17,11 +19,16 @@ type SutParams = {
   validationError: string
 }
 
+const history = createMemoryHistory()
 const makeSut = (params?: SutParams): SutTypes => {
   const authenticationSpy = new AuthenticationSpy()
   const validationStub = new ValidtionStub()
   validationStub.errorMessage = params?.validationError
-  const sut = render(<Login validation={validationStub} authentication={authenticationSpy}/>)
+  const sut = render(
+    <Router history={history}>
+      <Login validation={validationStub} authentication={authenticationSpy}/>
+    </Router>
+  )
   return {
     sut,
     authenticationSpy
@@ -161,7 +168,21 @@ describe('Login Component', () => {
     await waitFor(() => sut.getByTestId('form'))
     expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
   })
+
+  test('Should go to signup page', () => {
+    const { sut } = makeSut()
+    const register = sut.getByTestId('signup')
+    fireEvent.click(register)
+    expect(history.length).toBe(2)
+    expect(history.location.pathname).toBe('/signup')
+  })
 })
+
+// eslint-disable-next-line jest/no-commented-out-tests
+/**
+ Para rodar apenas um teste eu tenho o
+ test.only()
+*/
 
 /*
 getByTestId = capitura o atributo data-testid das tag
