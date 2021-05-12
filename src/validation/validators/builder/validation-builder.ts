@@ -6,12 +6,11 @@ import { MinLengthValidation } from '../min-length/min-length-validation'
 export class ValidationBuilder {
   private constructor (
     private readonly fieldName: string,
-    private readonly length: number,
     private readonly validations: FieldValidation[]
   ) {}
 
   static field (fieldName: string): ValidationBuilder {
-    return new ValidationBuilder(fieldName, 0, [])
+    return new ValidationBuilder(fieldName, [])
   }
 
   required (): ValidationBuilder {
@@ -21,6 +20,11 @@ export class ValidationBuilder {
 
   email (): ValidationBuilder {
     this.validations.push(new EmailValidation(this.fieldName))
+    return this
+  }
+
+  min (length: number): ValidationBuilder {
+    this.validations.push(new MinLengthValidation(this.fieldName, length))
     return this
   }
 
