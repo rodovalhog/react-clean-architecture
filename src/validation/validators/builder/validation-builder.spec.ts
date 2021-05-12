@@ -1,21 +1,35 @@
 import { RequiredFieldValidation, EmailValidation, MinLengthValidation } from '@/validation/validators'
 import { ValidationBuilder as sut } from './validation-builder'
-
+import faker from 'faker'
 describe('ValidationBuilder', () => {
   test('Should return RequiredFieldValidation', () => {
-    const validations = sut.field('any_field').required().build()
-    expect(validations).toEqual([new RequiredFieldValidation('any_field')])
+    const fieldName = faker.random.word()
+    const validations = sut.field(fieldName).required().build()
+    expect(validations).toEqual([new RequiredFieldValidation(fieldName)])
   })
 
   test('Should return EmailValidation', () => {
-    const validations = sut.field('any_field').email().build()
-    expect(validations).toEqual([new EmailValidation('any_field')])
+    const fieldName = faker.random.word()
+
+    const validations = sut.field(fieldName).email().build()
+    expect(validations).toEqual([new EmailValidation(fieldName)])
   })
 
   test('Should return MinLengthValidation', () => {
-    const field = 'any_field'
-    const minChar = 5
-    const validations = sut.field(field).min(minChar).build()
-    expect(validations).toEqual([new MinLengthValidation(field, minChar)])
+    const fieldName = faker.random.word()
+    const minChar = faker.random.number()
+
+    const validations = sut.field(fieldName).min(minChar).build()
+    expect(validations).toEqual([new MinLengthValidation(fieldName, minChar)])
+  })
+
+  test('Should return a list of validations', () => {
+    const fieldName = faker.random.word()
+    const minChar = faker.random.number()
+    const validations = sut.field(fieldName).required().min(minChar).email().build()
+    expect(validations).toEqual([
+      new RequiredFieldValidation(fieldName),
+      new MinLengthValidation(fieldName, minChar),
+      new EmailValidation(fieldName)])
   })
 })
