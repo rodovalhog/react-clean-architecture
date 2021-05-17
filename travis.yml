@@ -1,9 +1,0 @@
-language: node_js
-node_js:
-  - 14
-script:
-  - eslint 'src/**'
-  - npm run test:ci
-
-# Esse cara vai verificar nossa aplicação e se alguma etapa falhar
-# ele vai falhar nosso build
